@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پخش فیلم‌ها</title>
+
+    <!-- اضافه کردن CSS Plyr -->
+  </head>
+  <body>
+    <h1>لیست فیلم‌ها</h1>
+    <ul>
+      {% for video in videos %}
+      <li>
+        <a
+          href="{{ url_for('static', filename='video/' ~ video) }}"
+          class="video-link"
+          >{{ video }}</a
+        >
+      </li>
+      {% endfor %}
+    </ul>
+
+    <h2>پخش فیلم</h2>
+    <video id="my-video" controls>
+      <source
+        src="{{ url_for('static', filename='videos/' ~ video_name) }}"
+        type="video/mp4"
+      />
+      <track
+        id="subtitle-track"
+        kind="subtitles"
+        src="{{ url_for('static', filename='videos/' ~ subtitle_name) }}"
+        srclang="fa"
+        label="فارسی"
+        default
+      />
+      مرورگر شما قادر به پخش این ویدیو نیست.
+    </video>
+    <script>
+      //const player = new Plyr("#my-video");
+
+      const links = document.querySelectorAll(".video-link");
+      const videoElement = document.getElementById("my-video");
+      const videoSource = videoElement.querySelector("source");
+      const subtitleTrack = document.getElementById("subtitle-track");
+
+      links.forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          // مسیر ویدیو و زیرنویس
+          const videoUrl = link.getAttribute("href");
+          const subtitleUrl = videoUrl.replace(".mp4", ".vtt");
+
+          // تنظیم ویدیو و زیرنویس
+          videoSource.src = videoUrl;
+          subtitleTrack.src = subtitleUrl;
+
+          // بارگذاری مجدد ویدیو و زیرنویس
+          videoElement.load();
+
+          // بررسی اینکه آیا زیرنویس‌ها بارگذاری شده‌اند
+          subtitleTrack.addEventListener("load", () => {
+            console.log("زیرنویس بارگذاری شد.");
+          });
+
+          videoElement.play();
+        });
+      });
+    </script>
+    <!-- اضافه کردن JS Plyr -->
+  </body>
+</html>
