@@ -4,7 +4,7 @@ import os
 app = Flask(__name__)
 
 # پوشه‌ای که فیلم‌ها در آن قرار دارند
-VIDEO_FOLDER = 'static/video'
+VIDEO_FOLDER = './static/video'
 
 @app.route('/')
 def index():
@@ -18,4 +18,4 @@ def index():
     #return send_from_directory(VIDEO_FOLDER, video_name=video_name, subtitle_name=subtitle_name)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',debug=True)
+    app.run(host='0.0.0.0',debug=False)
